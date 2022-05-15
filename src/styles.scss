@@ -1,1 +1,47 @@
-/* You can add global styles to this file, and also import other style files */
+@import url('../node_modules/bootstrap/dist/css/bootstrap.css');
+
+body {
+  background-color: rgb(25, 26, 44);
+  font-family: 'Poppins';
+  color: rgb(245, 245, 245);
+}
+
+.coffee {
+  background-color: #172643;
+  height: 150px;
+}
+
+@media screen and (max-width: 750px) {
+  .coffeeImg {
+    max-width: 60px;
+    max-height: 60px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .coffeeImg {
+    max-width: 65px;
+    max-height: 65px;
+  }
+}
+
+@media screen and (max-width: 2000px) {
+  .coffeeImg {
+    width: 150px;
+    height: 150px;
+  }
+}
+
+@media screen and (min-width: 2001px) {
+  .coffeeImg {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+canvas {
+  position: absolute;
+  top: 0px;
+  height: 100%;
+  width: 100%;
+}
