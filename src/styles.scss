@@ -1,14 +1,14 @@
 @import url('../node_modules/bootstrap/dist/css/bootstrap.css');
 
 body {
-  background-color: rgb(25, 26, 44);
-  font-family: 'Poppins';
-  color: rgb(245, 245, 245);
+  background-color: rgb(25, 26, 44) !important;
+  font-family: 'Poppins' !important;
+  color: rgb(245, 245, 245) !important;
 }
 
 .coffee {
-  background-color: #172643;
-  height: 150px;
+  background-color: #172643 !important;
+  height: 150px !important;
 }
 
 @media screen and (max-width: 750px) {
