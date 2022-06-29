@@ -8,6 +8,8 @@ import { ResumeComponent } from './pages/resume/resume.component';
 import { MiniSliderComponent } from './components/mini-slider/mini-slider.component';
 import { KonamiDirective } from './konami.directive';
 import { SecretComponent } from './pages/secret/secret.component';
+import { ProjectsComponent } from './pages/projects/projects.component';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { SecretComponent } from './pages/secret/secret.component';
     ResumeComponent,
     MiniSliderComponent,
     KonamiDirective,
-    SecretComponent
+    SecretComponent,
+    ProjectsComponent,
+    NavigationComponent
   ],
   imports: [
     BrowserModule,
