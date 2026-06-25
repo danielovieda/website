@@ -1,0 +1,13 @@
+node_modules
+.DS_Store
+.svelte-kit
+build
+.env
+.env.*
+!.env.example
+.vercel
+*.log
+.npm
+.pnpm-debug.log
+pnpm-lock.yaml.bak
+drizzle/.snapshot

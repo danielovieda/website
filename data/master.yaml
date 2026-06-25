@@ -1,0 +1,506 @@
+# MASTER RESUME — source of truth for all tailoring.
+# Claude pulls from this file. Never invents content not present here.
+# Keep bullets verbose here; Claude trims when tailoring.
+#
+# Conventions:
+#   dates  : YYYY-MM (or 'present')
+#   tags   : free-form labels used to find relevant bullets fast
+#   tech   : technologies actually used on that job/project
+
+contact:
+  name: Daniel Ovieda
+  email: ovieda@gmail.com
+  phone: (925) 437-2447
+  location: Antioch, CA
+  links:
+    - label: linkedin.com/in/danielovieda
+      url: https://linkedin.com/in/danielovieda
+    - label: github.com/danielovieda
+      url: https://github.com/danielovieda
+    - label: danielovieda.com
+      url: http://danielovieda.com
+
+summary: |
+  Senior Full Stack Engineer and Operations Executive with 20+ years of combined technical
+  and leadership experience. Designs and ships AI-powered SaaS products end-to-end as a
+  solo founder while simultaneously running multi-location field-service operations — a rare
+  combination of hands-on engineering depth and proven general-management accountability.
+  Engineering specializations include TypeScript, React, Next.js, Node.js, React Native, and
+  multi-agent LLM pipelines (Anthropic Claude API, Ollama). Operations background spans
+  field-service management, fleet and dispatch operations, supply-chain and logistics, 24x7
+  customer support centers, and P&L ownership across industries including refrigerant
+  services, transportation, home security, AV/LED technology, satellite services, in-home services.
+  Led SOC 2 certification at a HIPAA-regulated healthtech company; built and managed teams
+  of up to 150 personnel.
+
+experience:
+  - company: RefriTrak
+    title: Founder & Lead Engineer
+    location: San Francisco Bay Area
+    start: 2025-09
+    end: present
+    tags: [founder, saas, full-stack, ai, product-management, operations, entrepreneurship]
+    tech: [Next.js 15, TypeScript, MongoDB, Prisma, Stripe, AWS S3, Anthropic Claude API, React Native, Expo, Vercel]
+    highlights:
+      - Founded and shipped a multi-tenant B2B SaaS platform end-to-end as the sole engineer; launched December 2025 with active paying customers.
+      - Own product strategy, architecture, customer development, and the full technical stack.
+      - Lead all project planning, scheduling, and coordination activities to ensure on-time, on-budget delivery.
+      - Provide technical consultation services in response to customer requests and business requirements.
+      - Serve as single point of contact for clients throughout the project lifecycle, managing expectations and requirements.
+      - Generate project schedules, progress reports, and maintain comprehensive project documentation.
+      - Coordinate with stakeholders through regular meetings, calls, and emails to ensure alignment and eliminate delays.
+      - Directed development team and coordinated technical resources to meet project milestones and deliverables.
+      - Built companion React Native (Expo SDK 54, React 19) field-tech mobile app submitted to App Store and Google Play, with one-time magic-link handoff for seamless web-to-mobile authentication.
+
+  - company: MS Media LLC
+    title: Full Stack Engineer
+    location: San Francisco, CA
+    start: 2020-01
+    end: present
+    tags: [full-stack, freelance, personal-projects, product-development, ui-ux]
+    tech: [TypeScript, JavaScript, Python, React, Angular, Next.js, Node.js, Express, AWS, HTML, CSS, SCSS, Bootstrap, TailwindCSS, Material UI, REST API, MongoDB, MySQL, PostgreSQL, AWS S3, IAM, Route 53, Cognito, CloudFront, Lambda]
+    highlights:
+      - 20 years of freelance and personal development projects; passionate about building scalable, modular, efficient, intuitive, and secure applications.
+      - Served as product manager, UI/UX tester, and led various personal projects including managing a 3-person dev team coding alongside them.
+      - Built full-stack media publishing application for social media distribution.
+      - Built full-stack dispatch and fleet management application.
+      - Built full-stack social media application.
+      - Created custom API integrations for various business systems.
+      - Built scalable web applications using modern frameworks and cloud infrastructure.
+      - Engineered AI-powered quoting system that reduces project estimation time from 5–10 minutes to under 30 seconds, achieving 97% time savings while maintaining human oversight for quality control.
+
+  - company: A-Gas
+    title: Field Service Manager / General Manager — Northern California & Nevada
+    location: Concord, CA
+    start: 2024-01
+    end: 2025-10
+    tags: [operations, field-service, p&l, leadership, fleet, kpi, refrigerant, account-management]
+    tech: [Samsara, Microsoft Excel, PowerBI, Power Automate, Google Workspace]
+    highlights:
+      - Led end-to-end operations for a refrigerant services location including dispatch, scheduling, and service delivery optimization across Northern California and Nevada.
+      - Owned operational P&L, ensuring location operated within financial constraints while maintaining high service quality standards.
+      - Managed operational budget and drove continuous improvement through KPI monitoring, consistently achieving monthly KPI targets at the local level.
+      - Trained and led a team of field technicians, providing ongoing support to enhance skills and efficiency.
+      - Coordinated appointment scheduling and project timelines to ensure efficient use of resources and on-time completion of services.
+      - Managed all aspects of account management, including client communications and ensuring customer satisfaction.
+      - Oversaw strategic account planning and business development initiatives.
+      - Implemented technology solutions to enhance operational efficiency and customer experience.
+      - The operational and customer domain at A-Gas directly informed the architecture and workflows of the RefriTrak SaaS platform built concurrently during this period.
+
+  - company: FormDr
+    title: Lead Full Stack Engineer
+    location: Remote
+    start: 2022-09
+    end: 2024-01
+    tags: [full-stack, healthtech, hipaa, soc2, ci-cd, product, engineering-leadership, remote]
+    tech: [JavaScript, TypeScript, React, Node.js, CI/CD, GitHub Actions, HIPAA-compliant infrastructure]
+    highlights:
+      - Developed and launched user-facing features in a healthtech product in collaboration with product managers and a remote engineering team, owning delivery through the CI/CD pipeline.
+      - Owned and managed the CI/CD pipeline end-to-end, streamlining deployments and ensuring high availability of a HIPAA-regulated production application.
+      - Led the SOC 2 certification initiative and updated application-level handling of sensitive medical information to meet HIPAA and SOC 2 requirements.
+      - Monitored production performance in real time, proactively identifying and resolving issues before user impact; collaborated across time zones with remote developers.
+
+  - company: WeDriveU
+    title: Operations Manager
+    location: South San Francisco, CA
+    start: 2021-05
+    end: 2022-09
+    tags: [operations, transportation, fleet, dispatch, safety, technology-integration, kpi]
+    tech: [Samsara, TripShot, Google Sheets, Google Apps Script, REST API]
+    highlights:
+      - Managed a team of 60 drivers and 5 dispatch staff, achieving 99.9% on-time arrival efficiency.
+      - Implemented new transportation and vehicle routing platforms; led a flawless cutover from the prior platform to its successor with zero service interruption.
+      - Architected and implemented new transportation platform integration, including custom API solutions for vehicle routing.
+      - Developed real-time analytics dashboard connecting Google Sheets to TripShot API for KPI tracking across all operational metrics.
+      - Managed fleet of 60+ vehicles with 99% uptime through preventative maintenance programs.
+      - Managed driver timecards and safety performance; audited Samsara driver logs, DVIR, and safety incidents.
+      - Responded as necessary to real-time events that impact passengers or operational capability.
+      - Reported hazardous spills and coordinated cleanup efforts with Environmental Health and Safety.
+      - Conducted monthly safety training with drivers.
+      - Researched, installed, and managed cloud video delivery systems in client fleet vehicles.
+      - Enhanced operational efficiency by executing driver/route optimization plans.
+      - Analyzed performance data to create and implement targeted action plans.
+
+  - company: ADT, LLC
+    title: General Operations Manager
+    location: San Francisco Bay Area, CA
+    start: 2021-01
+    end: 2021-05
+    tags: [operations, field-service, security-tech, fleet, kpi, coaching, multi-site, leadership]
+    tech: [Salesforce, Microsoft Excel, Google Sheets, KPI dashboards]
+    highlights:
+      - Managed residential and commercial installation and service operations across three Bay Area offices.
+      - Directed 2,000 installation and 10,000 service appointments monthly across 100+ technicians and a 100+ vehicle fleet.
+      - Directed revenue growth and profitability of the overall operation and in-home sales.
+      - Maintained high level of quality and timely service to customers for maximum retention; minimized customer churn by addressing escalated customer concerns.
+      - Reduced repeat customer visits through data-driven coaching strategies implemented for 100+ technicians.
+      - Analyzed and distributed KPI data; built area-wide action plans that drove improved performance across all locations.
+      - Partnered with sales team on high-profile accounts and coordinated white-glove service delivery.
+      - Implemented, tested, and trained teams on new security technology products and services.
+      - Managed fleet of 100+ vehicles including acquisition, maintenance, tracking, and driver safety.
+      - Conducted field technician evaluations on a weekly basis to observe and coach technicians.
+      - Coordinated sub-contractor relationships ensuring compliance with quality standards and industry requirements.
+      - Conducted contract reviews and generated proposals for commercial and residential security projects.
+
+  - company: WeDriveU
+    title: Operations Manager
+    location: South San Francisco, CA
+    start: 2020-05
+    end: 2021-01
+    tags: [operations, transportation, fleet, dispatch, data-analytics, kpi, api-integration]
+    tech: [Google Sheets, Google Apps Script, TripShot API, REST API]
+    highlights:
+      - Managed day-to-day operations of driver and dispatch teams ensuring reliable service delivery.
+      - Built a Google Sheets to TripShot API integration delivering KPI analytics into an operational dashboard; processed cost data driving $1.3M/month in customer invoicing.
+      - Developed operational dashboard in Google Sheets/Scripts to manage all aspects of the operation.
+      - Coordinated maintenance to ensure 99% uptime across a fleet of 60 vehicles.
+      - Ensured cleaning of vehicles was completed per local COVID-19 regulations.
+      - Managed driver and dispatch teams to ensure 99.9% on-time arrival efficiency.
+
+  - company: TruClear Global, Inc.
+    title: Director of Customer Operations
+    location: Newport Beach, CA
+    start: 2017-05
+    end: 2019-10
+    tags: [operations, startup, supply-chain, logistics, b2b, international, noc, av-technology, project-management, leadership, p&l]
+    tech: [Zoho, NetSuite, Zendesk, Jira, Confluence, Linux, SketchUp]
+    highlights:
+      - Managed day-to-day operations of installation and customer support teams in a high-growth startup environment, ensuring products and services exceeded customer expectations.
+      - Scaled operational department and processes from the ground up in a tech startup environment; established all operational SOPs.
+      - Oversaw product manufacturing, shipping, logistics, customs import/export, and supply chain teams.
+      - Created budget proposals, conducted cost-benefit analyses, and estimated projects up to $20M for B2B initiatives; also created BOM and pricing for client projects ranging from $50,000 to $1.6M.
+      - Established and operated a 24x7 international customer technical support center and Network Operations Center (NOC) for all customer issues.
+      - Created operational and customer support KPIs, troubleshooting processes, and escalation procedures for technical support teams.
+      - Coordinated multiple international logistics routes for customs importation; managed domestic and international AV projects including complex LED installations in Mexico.
+      - Collaborated with multiple departments and third-party providers on B2B projects; brought cross-functional teams together to meet critical client deadlines.
+      - Established installation guidelines compliant with OSHA, NIMS, EPA, and ADA requirements.
+      - Served as project manager for 10–15 high-value projects at any given time, from conception to client turnover.
+      - Recruited, hired, and trained employees from technician level to regional manager.
+      - Evaluated and planned for financial and operational risks across all installation projects; developed financial and operational risk mitigation strategies.
+      - Conducted site installation surveys and collaborated with clients on technical specifications.
+      - Led building walk-throughs and client training sessions upon project completion.
+      - System design and selection for digital signage and large-scale LED display applications.
+      - Trained personnel on proprietary system platforms (web-based, Linux).
+      - Managed planning, sub-contractor selection, and installation processes.
+      - Generated end-to-end project plans and schedules.
+      - Led installations of various audiovisual systems including large-scale LED displays, interactive charging stations, and proprietary hardware/software solutions.
+
+  - company: Dish Network, LLC
+    title: Operations Manager
+    location: South El Monte, CA
+    start: 2015-02
+    end: 2017-05
+    tags: [operations, field-service, fleet, warehouse, kpi, safety, osha, leadership, satellite, retail]
+    tech: [Oracle, Microsoft Office Suite, Smartsheet, VBA, Tableau]
+    highlights:
+      - Managed day-to-day operations of installation and service teams while maintaining facility.
+      - Ensured warehouse properly accounted for over $350,000 of equipment monthly; implemented inventory management system tracking that figure.
+      - Conducted audits on warehouse equipment, hazardous material compliance, and safety.
+      - Reviewed performance metrics and created strategies based on trending performance data.
+      - Directed employee performance to ensure goals were achieved; created excitement and engaged all employees in new business opportunities and strategies.
+      - Led field management team on coaching and performance management.
+      - Trained technicians and managers on policies, procedures, and safety requirements on a weekly basis.
+      - Conducted field safety inspections to ensure OSHA compliance; maintained safe working environment ensuring building compliance with Federal and State laws.
+      - Operated within the cost budgets of various accounts exceeding $400,000 monthly.
+      - Generated programs and practices that delivered a high level of customer satisfaction.
+      - Created, fostered, and maintained strategic business relationships within market, region, and company.
+      - Drove sales by motivating employees, delivering feedback, and creating competition.
+      - Ensured compliance with hazardous material disposal processes as required by law.
+      - Built a high-performing management team to deliver an advanced level of quality and service in all daily activities.
+      - Worked in conjunction with senior leadership and utilized financial data to drive performance improvements.
+      - Served as the volunteering liaison at Dish Network for the Los Angeles area.
+
+  - company: Dish Network, LLC
+    title: Field Service Manager
+    location: Manteca, CA
+    start: 2013-09
+    end: 2015-02
+    tags: [field-service, technician-management, safety, osha, coaching, satellite]
+    highlights:
+      - Managed field technicians to ensure key metrics were above standards.
+      - Counseled technicians on performance, installations, customer service, and safety regulations.
+      - Reviewed and approved timecards on a bi-weekly basis.
+      - Supported new technicians through training and development.
+      - Conducted on-site inspections to evaluate and coach technicians on quality and adherence to safety regulations.
+      - Ensured periodic inspections were completed to prevent safety incidents and vehicle downtime (OSHA compliance).
+      - Addressed escalated customer and/or employee issues.
+
+  - company: United States Marine Corps
+    title: Assistant Detachment Commander — Marine Security Guard
+    location: American Embassy, Lusaka, Zambia
+    start: 2010-05
+    end: 2011-10
+    tags: [military, leadership, security, budget-management, logistics, international]
+    highlights:
+      - Assisted the Detachment Commander in advising the Regional Security Officer on proper utilization of Marine Detachment on issues impacting mission readiness and security.
+      - Managed scheduling for six Marines; created professional working environment and provided regular feedback to subordinates.
+      - Maintained, accounted for, and secured all assigned security property and equipment; accounted for over $100,000 in military equipment on a monthly basis.
+      - Coordinated monthly maintenance of fully armored vehicles with General Services Office and maintenance contractors.
+      - Created monthly schedule for four drivers to maintain 24-hour driver support at high-threat post; supervised four drivers ensuring proper upkeep of vehicles and utilization of trip tickets.
+      - Coordinated pay and leave with Embassy Financial Management Office; counseled each driver on quarterly performance.
+      - Created budget in excess of $75,000 for Detachment utilization; managed multiple financial accounts.
+      - Managed emergency food source containing 60 days of supplies; cycled emergency food stuffs to prevent expiration.
+      - Coordinated disposition of outdated equipment from overseas location with region headquarters; replaced 1970s-era equipment with modern equipment.
+      - Ordered, received, stocked, and distributed office and home supplies for the Detachment.
+
+  - company: United States Marine Corps
+    title: Marine Security Guard
+    location: American Embassy, Paris, France
+    start: 2009-10
+    end: 2010-05
+    tags: [military, security, international, leadership]
+    highlights:
+      - Maintained accountability for all ammunition, weapons, and tactical response gear.
+      - Assisted in the creation and upkeep of response plans for intruder, bomb, internal defense, chemical, biological, radiation, and nuclear response procedures.
+      - Assessed security concerns affecting operational readiness of the Marine Detachment.
+      - Advised Detachment Commander on issues affecting operations on a weekly basis; created weekly reports after response drills for Detachment Commander and Regional Security Officer.
+      - Greeted and directed guests, personnel, and VIPs at the front of the chancery.
+      - Assisted in additional security services for President Obama and Secretary of State for APEC 2009, Singapore.
+
+  - company: United States Marine Corps
+    title: Marine Security Guard
+    location: American Consulate, Jeddah, Saudi Arabia
+    start: 2008-10
+    end: 2009-10
+    tags: [military, security, international, budget-management, events]
+    highlights:
+      - Provided armed internal security for the American Consulate in Jeddah, Saudi Arabia, a high-threat post.
+      - Conducted security inspections to ensure the safeguard of classified material; issued incident reports on discovery of security violations or unusual activity.
+      - Monitored an array of security equipment to control access of cleared personnel and provided escort for all non-cleared personnel.
+      - Monitored radio communications for Marine detachment and Local Guard Force; maintained operational security logs.
+      - Organized and supervised over 100 social functions with attendance surpassing 150 persons 90% of the time.
+      - Increased revenue from social functions to an average of $7,500 from $2,000.
+      - Managed multiple financial accounts summing in excess of $22,000; monitored and recorded expenses for all accounts.
+      - Hired and paid temporary staff (bartenders, etc.) to support social events.
+
+  - company: United States Marine Corps
+    title: Radar Technician
+    location: Okinawa, Japan
+    start: 2005-01
+    end: 2008-01
+    tags: [military, technical, electronics, radar]
+    highlights:
+      - Served as radar technician for USMC in Okinawa, Japan.
+
+education:
+  - school: University of Maryland Global Campus (UMGC)
+    degree: Master of Business Administration
+    start: 2014-01
+    end: 2016-01
+
+  - school: University of Maryland Global Campus (UMGC)
+    degree: Master of Science in IT (Project Management Focus)
+    start: 2013
+    end: 2015
+
+  - school: University of Maryland Global Campus (UMGC)
+    degree: Bachelor of Science in Computer Science
+    start: 2008
+    end: 2011
+
+  - school: MIT xPRO
+    degree: Professional Certificate in Coding (MERN Stack)
+    start: 2022-01
+    end: 2022-12
+
+projects:
+  - name: RefriTrak — Multi-Tenant B2B SaaS Platform
+    url: https://refritrak.com
+    description: Production B2B SaaS platform for refrigerant-services field operations; founded and built end-to-end as sole engineer.
+    tech: [Next.js 15, TypeScript, MongoDB, Prisma, Stripe, AWS S3, Anthropic Claude API, React Native, Expo SDK 54, Vercel, Vitest]
+    tags: [saas, founder, ai, multi-tenant, full-stack, mobile, stripe, hipaa-adjacent]
+    highlights:
+      - Architected and shipped a production multi-tenant SaaS platform with role-based access control, public REST API, customer portal on a separate subdomain, and an internal admin tier — unified through a centralized authentication and authorization boundary supporting multiple credential types.
+      - Built a domain-specific calculation engine paired with audit logging on all sensitive mutations, and Stripe-driven feature gating across free and paid subscription tiers.
+      - Designed Next.js middleware for subdomain routing (customer portal, QR landing) layered with locale-prefixed internationalization, and integrated the Anthropic Claude API to power AI-assisted customer workflows.
+      - Maintained a 1500+ unit test suite with integration tests against an in-memory database; enforced test-driven development for all business-critical logic.
+      - Bulk document processing pipeline using AI for EPA compliance regulations using an agnostic node worker
+      - Private npm AI tools library for maintaining AI tools and compliance workflows across apps and workers
+
+  - name: Local-LLM Strategic AI for a Real-Time Strategy Engine
+    description: Replaced a legacy game engine's strategic AI with calls to a locally-served LLM; includes custom C++ integration layer and QLoRA fine-tuning pipeline.
+    tech: [C++, MFC, Win32, WinHTTP, Ollama, Python, QLoRA]
+    tags: [ai, llm, c++, fine-tuning, local-llm, game-modding]
+    highlights:
+      - Wrote a non-blocking WinHTTP worker thread that serializes per-cycle battlefield snapshots to JSON, posts them to a local Ollama endpoint, and stores parsed strategy responses in a thread-safe shared advice store.
+      - Implemented a constrained strategy menu and engine-side override systems to enforce real-time constraints and prevent degenerate model behavior.
+      - Built a Python reward-scoring pipeline that converts per-game JSONL decision logs into 3,000+ scored training pairs, ready for QLoRA fine-tuning of a smaller real-time-capable model.
+
+  - name: Self-Hosted Social Media Scheduler
+    description: Flask + HTMX multi-platform social media scheduling system with state-machine pipeline and SQLite persistence.
+    tech: [Python, Flask, HTMX, SQLite, APScheduler, Tweepy, atproto SDK, OpenCV, ffmpeg]
+    tags: [automation, scheduling, python, flask, sqlite, social-media]
+    highlights:
+      - Built a modular blueprint architecture with multiple background tasks and a status-machine pipeline (ready → scheduled → posting → posted/failed → archived) using row-level claiming to prevent duplicate dispatches.
+      - Migrated stateful configuration from JSON files into SQLite via idempotent migration scripts; authored a desktop-to-server publishing workflow over SFTP with per-platform syntax handling.
+
+  - name: AI Chatbot Platform
+    description: Monorepo-architecture streaming AI chatbot with multiple deployable services, shared internal packages, and comprehensive technical design documentation; currently in progress.
+    tech: [pnpm, Turborepo, SvelteKit 2, Hono, BullMQ, Drizzle ORM, PostgreSQL, Docker]
+    tags: [ai, chatbot, monorepo, streaming, llm, full-stack]
+    highlights:
+      - Designed a pnpm workspaces + Turborepo monorepo with multiple deployable services (web app, streaming chat service, content workers, admin CLI) and shared internal packages for authentication, billing, chat, content pipelines, database access, LLM orchestration, moderation, and storage.
+      - Authored comprehensive technical design documentation covering system architecture, data schema, API contracts, streaming chat engine, content pipeline, pricing model, deployment topology, and testing strategy across a phased delivery roadmap.
+
+  - name: Full Stack Dispatch & Fleet Management Application
+    description: Freelance full-stack application for dispatch and fleet management operations.
+    tech: [JavaScript, React, Node.js, REST API, MySQL]
+    tags: [full-stack, fleet, dispatch, operations, freelance]
+    highlights:
+      - Built and delivered a full-stack dispatch and fleet management application as part of ongoing freelance work under MS Media LLC.
+
+skills:
+  operations:
+    - Operations Strategy & Execution
+    - P&L Management
+    - KPI Development & Monitoring
+    - Process Optimization & Automation
+    - Dispatch & Scheduling
+    - Fleet Management (100+ vehicles)
+    - Field Service Management
+    - Supply Chain & Logistics
+    - International Logistics & Customs
+    - Warehouse Management
+    - Change Management
+    - Risk Management
+    - Budget & Cost Management
+    - Sub-contractor Management
+    - Contract Review & Implementation
+    - Installation Coordination
+
+  leadership:
+    - Cross-functional Team Leadership
+    - Performance Management & Coaching
+    - Recruiting, Hiring & Training
+    - Remote Team Collaboration
+    - Technical Mentorship
+    - Multi-site Operations Management
+    - Up to 150 personnel managed
+
+  engineering_languages:
+    - TypeScript
+    - JavaScript
+    - Python
+    - C++
+    - SQL
+    - HTML/CSS
+    - SCSS
+    - VBA (Excel)
+    - Google Apps Script
+
+  frontend:
+    - React 19
+    - Next.js 13–16 (App Router, Server Components, Turbopack)
+    - SvelteKit 2 + Svelte 5
+    - React Native + Expo
+    - Angular
+    - Tailwind CSS v4
+    - shadcn/ui
+    - Radix
+    - Material UI
+    - Bootstrap
+    - HTMX
+
+  backend:
+    - Node.js 20
+    - Express
+    - Hono
+    - Flask
+    - REST API design
+    - Public API design
+    - Microservices
+    - BullMQ workers
+    - Multi-process Docker
+    - GraphQL-aware
+
+  data:
+    - MongoDB + Prisma
+    - PostgreSQL
+    - MySQL
+    - Drizzle ORM
+    - SQLite (WAL)
+    - Redis (Upstash, ioredis)
+    - AWS S3
+    - MERN stack
+
+  ai_llm:
+    - Anthropic Claude API (Sonnet + Opus) with prompt caching and tool use
+    - OpenAI-compatible APIs
+    - Vercel AI SDK
+    - Ollama (local LLM serving)
+    - QLoRA fine-tuning pipelines
+    - Multi-agent orchestration
+    - RAG patterns
+    - Agent design
+
+  auth_payments:
+    - OAuth
+    - JWT
+    - Passkeys / WebAuthn
+    - Email OTP
+    - SSO patterns
+    - Public API key management
+    - Stripe subscriptions + webhooks
+
+  cloud_devops:
+    - AWS (S3, IAM, Route 53, Cognito, CloudFront, Lambda, Chalice)
+    - Vercel
+    - Fly.io
+    - Docker (multi-stage builds, multi-process)
+    - CI/CD pipeline ownership
+    - GitHub Actions
+    - EAS Build (App Store + Google Play submission)
+    - Linux / Unix
+
+  testing:
+    - Vitest
+    - Jest
+    - jest-expo
+    - Integration testing with in-memory databases
+    - axios-mock-adapter
+    - Test-driven development
+
+  compliance_security:
+    - HIPAA
+    - SOC 2 (led certification initiative at FormDr)
+    - Audit logging
+    - Role-based access control
+    - Multi-tenant security
+    - PII handling
+    - OSHA
+    - NIMS
+    - EPA
+    - ADA
+
+  business_tools:
+    - Microsoft Office Suite (Excel Expert, Word, PowerPoint, Outlook — 15+ years)
+    - Microsoft Project
+    - Microsoft Power Automate / Power Platform
+    - PowerBI
+    - Advanced Excel (VBA, PowerPivot, DAX, Pivot Tables)
+    - Google Sheets / Google Workspace
+    - Smartsheet
+    - Salesforce
+    - Jira
+    - Confluence
+    - Zendesk
+    - Zoho
+    - NetSuite
+    - Oracle
+    - Tableau
+    - Samsara
+    - TripShot
+    - Monday.com
+    - GitHub
+    - SketchUp
+    - Adobe Photoshop (Expert)
+    - Adobe Illustrator
+    - Adobe Premiere
+    - Adobe XD
+    - Blender
+    - QuickBooks
+    - CMMS
+
+  languages_spoken:
+    - English
+    - Spanish
