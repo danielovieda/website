@@ -7,10 +7,11 @@
  */
 
 import { json, type RequestHandler } from '@sveltejs/kit'
-import { sql } from 'drizzle-orm'
+import { desc, sql } from 'drizzle-orm'
 import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { db } from '$lib/server/db'
+import { qaPairs } from '$lib/server/db/schema'
 import { embedOne, toPgVector } from '$lib/server/embeddings'
 
 const Body = z.object({
@@ -19,11 +20,26 @@ const Body = z.object({
   tags: z.array(z.string().trim().min(1).max(40)).max(20).optional(),
 })
 
+export const GET: RequestHandler = async () => {
+  const rows = await db
+    .select({
+      id: qaPairs.id,
+      question: qaPairs.question,
+      answer: qaPairs.answer,
+      tags: qaPairs.tags,
+      createdAt: qaPairs.createdAt,
+      updatedAt: qaPairs.updatedAt,
+    })
+    .from(qaPairs)
+    .orderBy(desc(qaPairs.updatedAt))
+  return json({ ok: true, pairs: rows })
+}
+
 export const POST: RequestHandler = async ({ request }) => {
   let parsed
   try {
     parsed = Body.parse(await request.json())
-  } catch (e) {
+  } catch {
     return json({ ok: false, error: 'Invalid input.' }, { status: 400 })
   }
 

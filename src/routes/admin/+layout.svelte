@@ -17,6 +17,7 @@
   const nav = [
     { href: '/admin/dashboard', label: 'Dashboard' },
     { href: '/admin/training', label: 'Training' },
+    { href: '/admin/qa-pairs', label: 'Q/A pairs' },
     { href: '/admin/ingest', label: 'Ingest' },
     { href: '/admin/visitors', label: 'Visitors' },
   ]

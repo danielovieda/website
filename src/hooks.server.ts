@@ -3,6 +3,7 @@ import { building } from '$app/environment'
 import { svelteKitHandler } from 'better-auth/svelte-kit'
 import { auth, ADMIN_EMAIL } from '$lib/server/auth'
 import { readVisitorIdFromCookie } from '$lib/server/visitor-session'
+import { DEV_VISITOR_ID, isDevBypassEnabled } from '$lib/server/dev-bypass'
 
 export const handle: Handle = async ({ event, resolve }) => {
   // Default locals
@@ -16,6 +17,12 @@ export const handle: Handle = async ({ event, resolve }) => {
     event.locals.visitorId = visitorId
   } catch {
     event.locals.visitorId = null
+  }
+
+  // Dev bypass: when DEV_CHAT_BYPASS=true, unlock chat without OTP verification.
+  // The dev visitor row is upserted lazily by /api/chat to keep FK constraints valid.
+  if (!event.locals.visitorId && isDevBypassEnabled()) {
+    event.locals.visitorId = DEV_VISITOR_ID
   }
 
   // Admin session (better-auth)

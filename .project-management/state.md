@@ -1,6 +1,10 @@
 # danielovieda.com: state
 
-_Last updated: 2026-06-24_
+_Last updated: 2026-07-19_
+
+## Tech debt
+- **Promote-to-Q/A-pair button on visitor transcripts** — on `/admin/visitors/[id]`, add an "Add my answer" button next to each user message that opens a form pre-filled with the question and POSTs to `/api/admin/qa-pairs`. Closes the read-transcript → correct-AI loop in one click instead of copy-pasting into the CLI. ~1 hour.
+
 
 ## In flight
 - Initial scaffold complete: SvelteKit + Svelte 5 + Tailwind, Drizzle schema, better-auth single-admin gate, OTP visitor flow, RAG embeddings, YAML ingest, AI SDK v6 (`@ai-sdk/svelte` Chat class) wired against the Vercel AI Gateway, public landing page, visitor verify modal, visitor chat panel, full admin console (dashboard, training, ingest, visitors browser with per-visitor transcripts), admin API endpoints (`/api/admin/qa-pairs`, `/api/admin/training`, `/api/admin/ingest`).

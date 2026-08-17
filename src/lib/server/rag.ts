@@ -65,14 +65,22 @@ export async function retrieveContext({
     metadata: r.metadata as Record<string, unknown>,
   }))
 
-  return [...qa, ...resume].sort((a, b) => b.score - a.score)
+  // Keep qa_pairs contiguous at the top: a flat score-sort can interleave
+  // resume prose between our best voice examples, weakening in-context style
+  // transfer. qa items get preferred position; each group sorted internally.
+  const qaSorted = qa.sort((a, b) => b.score - a.score)
+  const resumeSorted = resume.sort((a, b) => b.score - a.score)
+  return [...qaSorted, ...resumeSorted]
 }
 
 export function formatContextForPrompt(retrieved: Retrieved[]): string {
   if (retrieved.length === 0) {
-    return '(No relevant context found in resume or trained Q/A.)'
+    return '<context_item>No relevant context found in resume or trained Q/A.</context_item>'
   }
   return retrieved
-    .map((r, i) => `[${i + 1}] (${r.kind}, score=${r.score.toFixed(3)})\n${r.content}`)
-    .join('\n\n')
+    .map(
+      (r, i) =>
+        `<context_item index="${i + 1}" kind="${r.kind}">\n${r.content}\n</context_item>`
+    )
+    .join('\n')
 }

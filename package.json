@@ -12,8 +12,10 @@
     "typecheck": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "db:generate": "drizzle-kit generate",
     "db:push": "drizzle-kit push",
+    "db:migrate": "tsx scripts/migrate.ts",
     "db:studio": "drizzle-kit studio",
-    "ingest": "tsx src/lib/server/ingest/yaml-ingest.ts"
+    "ingest": "tsx src/lib/server/ingest/yaml-ingest.ts",
+    "qa": "tsx scripts/qa.ts"
   },
   "dependencies": {
     "@ai-sdk/openai": "^3.0.74",
@@ -31,6 +33,7 @@
   },
   "devDependencies": {
     "@ai-sdk/svelte": "^4.0.209",
+    "daisyui": "^4.12.24",
     "@sveltejs/adapter-vercel": "^5.6.3",
     "@sveltejs/kit": "^2.20.0",
     "@sveltejs/vite-plugin-svelte": "^4.0.0",

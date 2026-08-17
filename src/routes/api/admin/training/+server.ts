@@ -12,7 +12,7 @@ import { error, type RequestHandler } from '@sveltejs/kit'
 import { streamText, type UIMessage, convertToModelMessages } from 'ai'
 import { openai } from '@ai-sdk/openai'
 import { retrieveContext, formatContextForPrompt } from '$lib/server/rag'
-import { trainingSystemPrompt } from '$lib/server/chat-prompts'
+import { trainingSystemPrompt, wrapUserMessage } from '$lib/server/chat-prompts'
 
 const CHAT_MODEL = openai('gpt-4o')
 
@@ -33,10 +33,12 @@ export const POST: RequestHandler = async (event) => {
   const contextBlock = formatContextForPrompt(retrieved)
   const system = trainingSystemPrompt({ contextBlock })
 
+  const wrappedMessages = uiMessages.map(wrapUserPartsForInjectionDefense)
+
   const result = streamText({
     model: CHAT_MODEL,
     system,
-    messages: await convertToModelMessages(uiMessages),
+    messages: await convertToModelMessages(wrappedMessages),
     temperature: 0.6,
   })
 
@@ -50,4 +52,14 @@ function extractText(m: UIMessage): string {
     .map((p) => p.text)
     .join('\n')
     .trim()
+}
+
+function wrapUserPartsForInjectionDefense(m: UIMessage): UIMessage {
+  if (m.role !== 'user' || !m.parts) return m
+  return {
+    ...m,
+    parts: m.parts.map((p) =>
+      p.type === 'text' ? { ...p, text: wrapUserMessage(p.text) } : p
+    ),
+  }
 }
