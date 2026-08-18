@@ -1,7 +1,17 @@
 # danielovieda.com — agent guide
 
-Interactive personal site for Daniel Ovieda (the owner of this repo —
-`ovieda@gmail.com`, sole admin). Single-page no-nav landing where a verified
+Daniel Ovieda's site and, increasingly, **the web surface for whatever the
+house system needs a browser for** (he owns this repo — `ovieda@gmail.com`,
+sole admin).
+
+It started as an interactive resume and is no longer only that. The resume
+experience is still the front door; alongside it now live small purpose-built
+surfaces for other projects on the NUC — the first is the Japanese daily-study
+feedback survey at `/jp/[token]`. Expect more. When something on the house
+machine needs a screen, a form, or a link that survives being tapped on a
+phone, it belongs here rather than in a new app.
+
+The resume front door: single-page no-nav landing where a verified
 visitor (name + non-public email + phone + emailed 6-digit OTP) unlocks a chat
 with "Daniel's AI." The AI speaks in **first person AS Daniel**, answering only
 from RAG context (resume chunks from `data/master.yaml` plus admin-curated Q/A
@@ -161,6 +171,84 @@ There is no "wipe all qa_pairs" command on purpose — destructive ops need
 intent. If Daniel asks, write a one-shot SQL via `tsx` rather than
 generalizing the CLI.
 
+## Japanese daily-study loop
+
+A `claude -p` job on the house NUC emails Daniel one Japanese word each
+morning. This site is the **feedback channel** for it — the NUC owns the
+curriculum and the schedule; the only thing that lives here is one row per day
+in `jp_days`.
+
+The cycle:
+
+1. NUC sends the email and `POST`s the item to `/api/jp/day` (bearer
+   `JP_API_TOKEN`), upserting on `day_n`.
+2. That POST returns `surveyUrl` — the site mints the link itself, signing
+   `<dayN>.<hmac>` with `JP_LINK_SECRET` (see `jp-token.ts`). 35 characters,
+   fits one line of plain text. **The signing key never leaves Vercel**; the
+   NUC holds only `JP_API_TOKEN`, which can announce a day and read feedback
+   but cannot forge a link for any other day.
+3. Daniel taps it and answers three questions: how hard, did he already know
+   it, which review words he blanked on. Plus an optional note.
+4. Next morning the NUC `POST`s `/api/jp/feedback`, which claims every
+   answered-but-unconsumed row **and marks them consumed in the same call.**
+   It is POST, not GET, precisely because it mutates.
+
+Things that will bite you:
+
+- **Claiming feedback consumes it.** Don't call `/api/jp/feedback` to "have a
+  look" — a row is delivered exactly once. Query `jp_days` directly to inspect.
+  A re-submitted survey clears `pulled_at`, so corrections do get redelivered.
+- **`takeFeedback` must stay a single `UPDATE ... RETURNING`.** It was a
+  select-then-update loop and that was wrong twice: a correction submitted
+  between the select and the update was marked consumed while the stale
+  snapshot was returned (lost for good), and two overlapping calls both read
+  before either wrote, delivering the same grade twice. Do not "simplify" it
+  back into a read followed by a write.
+- **`/api/jp/day` resolves the link before it writes.** It used to record the
+  row and then discover `PUBLIC_SITE_URL` was missing, returning 500 to a
+  caller that sent no email — leaving a day marked as taught that never was.
+- **Re-announcing a day must never wipe a grade.** `recordDay` upserts the
+  item fields only; the survey columns are deliberately untouched.
+- **`JP_API_TOKEN` fails closed.** Unset means both endpoints reject
+  everything. They never fall open.
+- **`JP_LINK_SECRET` is deliberately not `BETTER_AUTH_SECRET`.** Don't
+  "simplify" by reusing the auth secret. It would hand link-minting authority
+  the same key that signs admin sessions, and rotating that key — a routine
+  act that should only log Daniel out — would 404 every survey link in every
+  email already sent. It also fails closed: unset means tokens can be neither
+  signed nor verified.
+- **`PUBLIC_SITE_URL` must be set** or `/api/jp/day` returns 500 rather than
+  emitting a link with a broken base.
+- The survey page is public but unlisted and `noindex`, and the token grants
+  nothing except grading one Japanese word. No PII is involved.
+
+## This database is production
+
+`DATABASE_URL` points at the **same Neon database in dev and in production** —
+there is no separate dev instance. Daniel's instruction, 2026-08-17: *"we'll
+use this same URL for dev AND production so don't do any deletes or drops that
+aren't deliberate."*
+
+So: no `DROP`, no `TRUNCATE`, no unqualified `DELETE` or `UPDATE`, ever, unless
+Daniel has asked for that exact thing. `pnpm db:migrate` re-applies **every**
+file in `drizzle/` on each run, so every statement in every migration must stay
+idempotent (`IF NOT EXISTS` / guarded `DO $$` blocks). Before running it,
+re-read the files — one destructive line in an old migration would run again
+against live data. Take row counts before and after anything structural and
+confirm they match.
+
+Live as of 2026-08-17: 134 `qa_pairs`, 178 `resume_chunks`, 78 `chat_messages`,
+1 visitor.
+
+## Verifying a deploy
+
+`src/lib/server/build-id.ts` holds a `BUILD_ID` string. `/push/<BUILD_ID>`
+returns `200 OK`; every other id 404s. Change the id, push, then poll the URL
+until it answers 200 — that is proof the running bundle is the one just pushed,
+rather than Vercel still serving the previous build or having failed the build
+entirely. Without it, "the push succeeded" only means GitHub accepted it.
+
+
 ## Auth model
 
 There are two completely separate identity surfaces:
@@ -181,11 +269,18 @@ files; the hook is authoritative.
 ## Discipline
 
 - **DO NOT commit. DO NOT push. DO NOT `git init`.** Don't even stage. The
-  user manages the repo.
+  user manages the repo. *(Daniel waived this once, on 2026-08-17, to ship the
+  Japanese study loop — "commit it, push it, and it will go live." Treat that
+  as spent. The default is still hands off; ask each time.)*
 - Don't introduce new env vars without updating `.env.example`. The full set is
   documented there.
-- Don't add a top-level nav bar or extra public pages. This is a deliberate
-  single-page experience.
+- **Public routes are fine** (changed 2026-08-17). The old rule here forbade
+  extra public pages; that was written when the site was only an interactive
+  resume. New surfaces for other house projects are the point now. Two things
+  still hold: **don't add a top-level nav bar**, and **don't link new surfaces
+  from the landing page** — the resume front door stays a single, focused
+  experience, and a private utility reached by a signed link has no business
+  advertising itself. Mark such pages `noindex`.
 - Don't paginate the visitors list — it's expected to stay small.
 - Visitor PII (name/email/phone) only ever surfaces inside `/admin/*`.
 
@@ -207,6 +302,10 @@ files; the hook is authoritative.
 | Visitors browser | `src/routes/admin/visitors/` |
 | Agent Q/A CLI | `scripts/qa.ts` (`pnpm qa …`) |
 | Migration runner | `scripts/migrate.ts` (`pnpm db:migrate`) |
+| Japanese survey (public, token-gated) | `src/routes/jp/[token]/` |
+| Japanese machine API | `src/routes/api/jp/{day,feedback}/+server.ts` |
+| Japanese helpers | `src/lib/server/{jp,jp-token,jp-auth}.ts` |
+| Deploy verification | `src/routes/push/[id]/` + `src/lib/server/build-id.ts` |
 | Better-auth proxy | `src/routes/api/auth/[...all]/+server.ts` |
 | RAG | `src/lib/server/{rag,embeddings}.ts` |
 | Prompts | `src/lib/server/chat-prompts.ts` |
@@ -247,6 +346,7 @@ First admin: visit `/admin` — if no users exist yet, the form switches to
 | `visitors` | name + email + phone + verified_at + first/last seen | no |
 | `otp_codes` | hashed 6-digit codes, 10-min expiry, attempt counter | no |
 | `chat_sessions`, `chat_messages` | every visitor conversation, role + content + tokens | no |
+| `jp_days` | one row per Japanese lesson day: the emailed item + the owner's survey answers | no |
 
 RAG retrieval (`src/lib/server/rag.ts`):
 - Top 4 from `qa_pairs` + top 6 from `resume_chunks`, each scored as

@@ -193,6 +193,51 @@ export const chatMessages = pgTable(
   })
 )
 
+/** One review prompt quizzed inside a daily email. */
+export type JpReviewWord = { dayN: number; word: string; gloss: string }
+
+// ---------- Japanese daily study loop -----------------------------------------
+// Feedback channel for the daily Japanese email sent by the house machine.
+// One row per day: the house machine POSTs the day's item when it sends the
+// email, the owner taps the emailed link and answers a 3-question survey, and
+// the house machine pulls the answers back the next morning to schedule the
+// next lesson. Nothing here is public and no PII is involved — the survey is
+// reached only with a signed per-day token.
+
+export const jpDays = pgTable(
+  'jp_days',
+  {
+    id: text('id').primaryKey(),
+    // Monotonic lesson number ("Day 012"). Authoritative counter lives on the
+    // house machine; this mirrors it so the survey page can render the item.
+    dayN: integer('day_n').notNull(),
+    word: text('word').notNull(),
+    reading: text('reading').notNull(),
+    romaji: text('romaji').notNull(),
+    gloss: text('gloss').notNull(),
+    // [{ dayN, word, gloss }] — the review prompts quizzed in that email, so
+    // the survey can ask which ones were missed.
+    reviewWords: jsonb('review_words').$type<JpReviewWord[]>().notNull().default([]),
+    sentAt: timestamp('sent_at', { withTimezone: true }).notNull().defaultNow(),
+
+    // ----- survey answers; all null until the owner responds -----
+    difficulty: text('difficulty', { enum: ['easy', 'medium', 'hard'] }),
+    alreadyKnew: boolean('already_knew'),
+    // Array of dayN values from reviewWords that the owner blanked on.
+    missedReviews: jsonb('missed_reviews').$type<number[]>().notNull().default([]),
+    note: text('note'),
+    respondedAt: timestamp('responded_at', { withTimezone: true }),
+
+    // Set when the house machine has consumed this row's feedback, so a pull
+    // is idempotent and never re-applies the same grade twice.
+    pulledAt: timestamp('pulled_at', { withTimezone: true }),
+  },
+  (table) => ({
+    dayIdx: uniqueIndex('jp_days_day_n_idx').on(table.dayN),
+    pullIdx: index('jp_days_pull_idx').on(table.respondedAt, table.pulledAt),
+  })
+)
+
 // ---------- Types -------------------------------------------------------------
 
 export type User = typeof user.$inferSelect
@@ -201,3 +246,4 @@ export type ResumeChunk = typeof resumeChunks.$inferSelect
 export type QaPair = typeof qaPairs.$inferSelect
 export type ChatMessage = typeof chatMessages.$inferSelect
 export type ChatSession = typeof chatSessions.$inferSelect
+export type JpDay = typeof jpDays.$inferSelect
