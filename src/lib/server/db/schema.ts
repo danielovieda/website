@@ -22,6 +22,7 @@ import {
   integer,
   jsonb,
   pgTable,
+  real,
   text,
   timestamp,
   uniqueIndex,
@@ -238,6 +239,40 @@ export const jpDays = pgTable(
   })
 )
 
+// ---------- house research ----------------------------------------------------
+
+/** One YouTube link on a research item. Never embedded — always a plain link. */
+export type ResearchVideo = { title: string; url: string }
+
+/**
+ * Findings from the nightly research runner on the house machine.
+ *
+ * Same shape of relationship as jp_days: the house machine owns the queue and
+ * the workflow, this table is only the published copy the email links to.
+ */
+export const researchItems = pgTable(
+  'research_items',
+  {
+    id: text('id').primaryKey(),
+    // research.id on the house machine; the /research/<ref> route key.
+    ref: integer('ref').notNull(),
+    title: text('title').notNull(),
+    question: text('question').notNull(),
+    findings: text('findings').notNull(),
+    videos: jsonb('videos').$type<ResearchVideo[]>().notNull().default([]),
+    // Hours the research concluded the job takes; written back to house.db.
+    estHours: real('est_hours'),
+    // The adversarial pass's conclusion.
+    verdict: text('verdict'),
+    project: text('project'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    refIdx: uniqueIndex('research_items_ref_idx').on(table.ref),
+  })
+)
+
 // ---------- Types -------------------------------------------------------------
 
 export type User = typeof user.$inferSelect
@@ -247,3 +282,4 @@ export type QaPair = typeof qaPairs.$inferSelect
 export type ChatMessage = typeof chatMessages.$inferSelect
 export type ChatSession = typeof chatSessions.$inferSelect
 export type JpDay = typeof jpDays.$inferSelect
+export type ResearchItem = typeof researchItems.$inferSelect

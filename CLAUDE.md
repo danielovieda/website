@@ -268,10 +268,13 @@ files; the hook is authoritative.
 
 ## Discipline
 
-- **DO NOT commit. DO NOT push. DO NOT `git init`.** Don't even stage. The
-  user manages the repo. *(Daniel waived this once, on 2026-08-17, to ship the
-  Japanese study loop — "commit it, push it, and it will go live." Treat that
-  as spent. The default is still hands off; ask each time.)*
+- **Commit and push freely — no approval needed** (changed 2026-08-22).
+  Daniel granted standing authority: *"you have full authority to commit and
+  push without direct approval from me."* This replaces the old hands-off rule,
+  which required asking every time and had been waived once already on
+  2026-08-17 for the Japanese study loop. What did **not** change: a push is
+  not done until `/push/<BUILD_ID>` answers 200, and the database is shared
+  between dev and production, so a migration ships live the moment it runs.
 - Don't introduce new env vars without updating `.env.example`. The full set is
   documented there.
 - **Public routes are fine** (changed 2026-08-17). The old rule here forbade
