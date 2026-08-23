@@ -7,6 +7,8 @@
 
   let adding = $state(false)
 
+  const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+
   function overdue(due: string | null) {
     return Boolean(due && due < data.today)
   }
@@ -83,7 +85,12 @@
         <input type="hidden" name="id" value={item.id} />
         <button
           type="submit"
-          aria-label={item.status === 'done' ? 'Reopen' : 'Complete'}
+          aria-label={item.recur
+            ? 'Done for this week'
+            : item.status === 'done'
+              ? 'Reopen'
+              : 'Complete'}
+          title={item.recur ? 'Rolls forward to the next occurrence' : undefined}
           class="mt-0.5 flex h-5 w-5 items-center justify-center rounded border
                  {item.status === 'done' ? 'border-accent bg-accent text-ink-900' : 'border-ink-500'}"
           >{item.status === 'done' ? '✓' : ''}</button
@@ -116,6 +123,10 @@
                   : 'text-ink-400'}"
             />
           </form>
+          {#if item.dueTime}<span class="text-ink-400">{item.dueTime}</span>{/if}
+          {#if item.recur === 'weekly'}
+            <span class="text-ink-500">every {DAYS[item.recurWeekday ?? 0]}</span>
+          {/if}
           {#if overdue(item.dueDate)}<span class="text-red-400">overdue</span>{/if}
           {#if dueToday(item.dueDate)}<span class="text-accent">today</span>{/if}
         </div>

@@ -25,6 +25,9 @@ export const load: PageServerLoad = async ({ params, url }) => {
       status: i.status,
       priority: i.priority,
       dueDate: i.dueDate,
+      dueTime: i.dueTime ? i.dueTime.slice(0, 5) : null,
+      recur: i.recur,
+      recurWeekday: i.recurWeekday,
     })),
   }
 }

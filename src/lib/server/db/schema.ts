@@ -19,6 +19,7 @@
 import {
   boolean,
   date,
+  time,
   index,
   integer,
   jsonb,
@@ -293,8 +294,16 @@ export const workItems = pgTable(
     status: text('status', { enum: ['open', 'done', 'dropped'] }).notNull().default('open'),
     // 1 highest .. 5 lowest, matching house-pm so both read the same way.
     priority: integer('priority').notNull().default(3),
-    // A plain date, not a timestamp: a deadline is a day, not an instant.
+    // A plain date, not a timestamp: a deadline is usually a day.
     dueDate: date('due_date'),
+    // ...but sometimes it is an hour. "Noon every Thursday" cannot be
+    // expressed without this, and without it a 14:00 reminder cannot tell
+    // that a noon deadline has already passed.
+    dueTime: time('due_time'),
+    // NULL = happens once. 'weekly' is the only cadence so far.
+    recur: text('recur', { enum: ['weekly'] }),
+    // 0 = Sunday .. 6 = Saturday, matching JS getDay().
+    recurWeekday: integer('recur_weekday'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     completedAt: timestamp('completed_at', { withTimezone: true }),

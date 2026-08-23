@@ -44,6 +44,8 @@ export const GET: RequestHandler = async ({ request }) => {
       kind: i.kind,
       priority: i.priority,
       dueDate: i.dueDate,
+      dueTime: i.dueTime ? i.dueTime.slice(0, 5) : null,
+      recur: i.recur,
     })
     return json({
       ok: true,
