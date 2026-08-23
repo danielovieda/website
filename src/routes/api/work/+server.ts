@@ -20,6 +20,21 @@ export const GET: RequestHandler = async ({ request }) => {
     return json({ ok: false, error: 'Server is not configured to build links' }, { status: 500 })
   }
 
+  // Resolved BEFORE the read, matching /api/jp/day: a caller that gets a 500
+  // sends no reminder, and "could not read the work list" would be a lie when
+  // the real problem is an unset signing key. This is the first thing that
+  // breaks on a fresh deploy, so it says so.
+  let url: string
+  try {
+    url = `${base}/work/${signWorkToken()}`
+  } catch (err) {
+    console.error('api/work: cannot sign the work link:', err)
+    return json(
+      { ok: false, error: 'WORK_LINK_SECRET is not configured on this deployment' },
+      { status: 500 }
+    )
+  }
+
   try {
     const { open, overdue, dueToday } = await workForReminder()
     const slim = (i: (typeof open)[number]) => ({
@@ -32,7 +47,7 @@ export const GET: RequestHandler = async ({ request }) => {
     })
     return json({
       ok: true,
-      url: `${base}/work/${signWorkToken()}`,
+      url,
       counts: { open: open.length, overdue: overdue.length, dueToday: dueToday.length },
       open: open.map(slim),
       overdue: overdue.map(slim),
