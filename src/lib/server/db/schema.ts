@@ -18,6 +18,7 @@
 
 import {
   boolean,
+  date,
   index,
   integer,
   jsonb,
@@ -273,6 +274,36 @@ export const researchItems = pgTable(
   })
 )
 
+// ---------- work checklist ----------------------------------------------------
+
+/**
+ * Tasks and ideas for Daniel's job. Postgres is the source of truth here,
+ * unlike house-pm/fitness/WIFE which are local-first: he edits this from a
+ * phone via a signed link, and the house machine READS it over the API to
+ * build weekday reminders. One writer, no sync problem.
+ */
+export const workItems = pgTable(
+  'work_items',
+  {
+    id: text('id').primaryKey(),
+    title: text('title').notNull(),
+    notes: text('notes'),
+    // An idea routinely becomes a task; same table so its history survives.
+    kind: text('kind', { enum: ['task', 'idea'] }).notNull().default('task'),
+    status: text('status', { enum: ['open', 'done', 'dropped'] }).notNull().default('open'),
+    // 1 highest .. 5 lowest, matching house-pm so both read the same way.
+    priority: integer('priority').notNull().default(3),
+    // A plain date, not a timestamp: a deadline is a day, not an instant.
+    dueDate: date('due_date'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+    completedAt: timestamp('completed_at', { withTimezone: true }),
+  },
+  (table) => ({
+    openIdx: index('work_items_open_idx').on(table.status, table.dueDate),
+  })
+)
+
 // ---------- Types -------------------------------------------------------------
 
 export type User = typeof user.$inferSelect
@@ -283,3 +314,4 @@ export type ChatMessage = typeof chatMessages.$inferSelect
 export type ChatSession = typeof chatSessions.$inferSelect
 export type JpDay = typeof jpDays.$inferSelect
 export type ResearchItem = typeof researchItems.$inferSelect
+export type WorkItem = typeof workItems.$inferSelect
