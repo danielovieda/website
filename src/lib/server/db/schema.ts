@@ -304,12 +304,72 @@ export const workItems = pgTable(
     recur: text('recur', { enum: ['weekly'] }),
     // 0 = Sunday .. 6 = Saturday, matching JS getDay().
     recurWeekday: integer('recur_weekday'),
+    // Set when this task came out of a meeting; ON DELETE SET NULL so
+    // deleting the meeting entry never takes an outstanding task with it.
+    meetingEntryId: text('meeting_entry_id'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     completedAt: timestamp('completed_at', { withTimezone: true }),
   },
   (table) => ({
     openIdx: index('work_items_open_idx').on(table.status, table.dueDate),
+  })
+)
+
+// ---------- meetings ----------------------------------------------------------
+
+export const meetings = pgTable('meetings', {
+  id: text('id').primaryKey(),
+  title: text('title').notNull(),
+  withWhom: text('with_whom'),
+  recur: text('recur', { enum: ['weekly'] }),
+  recurWeekday: integer('recur_weekday'),
+  meetTime: time('meet_time'),
+  active: boolean('active').notNull().default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+})
+
+/**
+ * One row per occurrence, created lazily — the next occurrence appears the
+ * first time something is added to its agenda, so a year-long series does not
+ * pre-generate fifty-two empty rows.
+ */
+export const meetingEntries = pgTable(
+  'meeting_entries',
+  {
+    id: text('id').primaryKey(),
+    meetingId: text('meeting_id')
+      .notNull()
+      .references(() => meetings.id, { onDelete: 'cascade' }),
+    meetsOn: date('meets_on').notNull(),
+    notes: text('notes'),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    byMeeting: index('meeting_entries_meeting_idx').on(table.meetingId, table.meetsOn),
+    oneEntryPerDate: uniqueIndex('meeting_entries_meeting_date_key').on(
+      table.meetingId,
+      table.meetsOn
+    ),
+  })
+)
+
+/** Rows, not one blob: items arrive across a week and get ticked off in the room. */
+export const meetingAgendaItems = pgTable(
+  'meeting_agenda_items',
+  {
+    id: text('id').primaryKey(),
+    entryId: text('entry_id')
+      .notNull()
+      .references(() => meetingEntries.id, { onDelete: 'cascade' }),
+    body: text('body').notNull(),
+    discussed: boolean('discussed').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    byEntry: index('meeting_agenda_entry_idx').on(table.entryId),
   })
 )
 
@@ -324,3 +384,6 @@ export type ChatSession = typeof chatSessions.$inferSelect
 export type JpDay = typeof jpDays.$inferSelect
 export type ResearchItem = typeof researchItems.$inferSelect
 export type WorkItem = typeof workItems.$inferSelect
+export type Meeting = typeof meetings.$inferSelect
+export type MeetingEntry = typeof meetingEntries.$inferSelect
+export type MeetingAgendaItem = typeof meetingAgendaItems.$inferSelect

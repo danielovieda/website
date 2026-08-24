@@ -1,5 +1,6 @@
 <script lang="ts">
   import { enhance } from '$app/forms'
+  import { page } from '$app/state'
   import type { ActionData, PageData } from './$types'
 
   type Props = { data: PageData; form: ActionData }
@@ -147,6 +148,20 @@
   {#if ideas.length}
     <h2 class="mt-7 text-xs font-semibold uppercase tracking-wide text-ink-400">Ideas</h2>
     <ul>{#each ideas as item (item.id)}{@render row(item)}{/each}</ul>
+  {/if}
+
+  {#if data.meetings.length}
+    <h2 class="mt-8 text-xs font-semibold uppercase tracking-wide text-ink-400">Meetings</h2>
+    <ul class="mt-1">
+      {#each data.meetings as m (m.id)}
+        <li class="border-b border-ink-800 py-2">
+          <a href={`${page.url.pathname}/m/${m.id}`} class="text-[15px] underline underline-offset-4"
+            >{m.title}</a
+          >
+          {#if m.withWhom}<span class="text-xs text-ink-500"> · {m.withWhom}</span>{/if}
+        </li>
+      {/each}
+    </ul>
   {/if}
 
   {#if !data.items.length}

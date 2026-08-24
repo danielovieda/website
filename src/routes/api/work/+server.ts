@@ -1,6 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit'
 import { isAuthorized } from '$lib/server/jp-auth'
 import { workForReminder } from '$lib/server/work'
+import { upcomingMeetings } from '$lib/server/meetings'
 import { signWorkToken } from '$lib/server/work-token'
 
 /**
@@ -37,6 +38,10 @@ export const GET: RequestHandler = async ({ request }) => {
 
   try {
     const { open, overdue, dueToday } = await workForReminder()
+    // The agenda for the next occurrence of each meeting. This is the half
+    // that changes how a 1:1 goes -- walking in with three things beats
+    // remembering none.
+    const meetings = await upcomingMeetings()
     const slim = (i: (typeof open)[number]) => ({
       id: i.id,
       title: i.title,
@@ -51,6 +56,7 @@ export const GET: RequestHandler = async ({ request }) => {
       ok: true,
       url,
       counts: { open: open.length, overdue: overdue.length, dueToday: dueToday.length },
+      meetings,
       open: open.map(slim),
       overdue: overdue.map(slim),
       dueToday: dueToday.map(slim),

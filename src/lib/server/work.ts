@@ -20,7 +20,7 @@ const ZONE = 'America/Los_Angeles'
  * — a Thursday task ticked off on Thursday evening would schedule the Thursday
  * after next, and a deadline today would read as overdue.
  */
-function localNow(): { date: string; clock: string; weekday: number } {
+export function localNow(): { date: string; clock: string; weekday: number } {
   const now = new Date()
   const parts = new Intl.DateTimeFormat('en-CA', {
     timeZone: ZONE,
@@ -44,6 +44,7 @@ export type NewWorkItem = {
   dueTime?: string | null
   recur?: 'weekly' | null
   recurWeekday?: number | null
+  meetingEntryId?: string | null
 }
 
 export async function listWork(includeDone = false): Promise<WorkItem[]> {
@@ -75,6 +76,7 @@ export async function addWork(input: NewWorkItem): Promise<WorkItem> {
       dueTime: input.dueTime || null,
       recur: input.recur ?? null,
       recurWeekday: input.recurWeekday ?? null,
+      meetingEntryId: input.meetingEntryId ?? null,
     })
     .returning()
   if (!row) throw new Error('addWork: no row returned')

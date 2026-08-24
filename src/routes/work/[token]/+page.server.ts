@@ -2,6 +2,7 @@ import { error, fail } from '@sveltejs/kit'
 import { z } from 'zod'
 import { verifyWorkToken } from '$lib/server/work-token'
 import { addWork, listWork, toggleWork, updateWork } from '$lib/server/work'
+import { listMeetings } from '$lib/server/meetings'
 import type { Actions, PageServerLoad } from './$types'
 
 /** Every action re-checks the token. The load succeeding does not authorise a
@@ -14,8 +15,10 @@ export const load: PageServerLoad = async ({ params, url }) => {
   guard(params.token)
   const showDone = url.searchParams.get('done') === '1'
   const items = await listWork(showDone)
+  const meetings = await listMeetings()
   return {
     showDone,
+    meetings: meetings.map((m) => ({ id: m.id, title: m.title, withWhom: m.withWhom })),
     today: new Date().toISOString().slice(0, 10),
     items: items.map((i) => ({
       id: i.id,
