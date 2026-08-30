@@ -373,6 +373,49 @@ export const meetingAgendaItems = pgTable(
   })
 )
 
+// ---------- kanji practice ----------------------------------------------------
+
+export type KanjiWord = { w: string; r: string; romaji: string; gloss: string }
+
+/**
+ * Stroke-order study set for JLPT N5/N4, built from Dan's own word catalogue
+ * so every kanji here appears in something he is actually being taught.
+ * `svg` is KanjiVG - Japanese stroke order, not the Chinese-derived data that
+ * ships with hanzi-writer.
+ */
+export const kanji = pgTable(
+  'kanji',
+  {
+    id: text('id').primaryKey(),
+    ch: text('ch').notNull(),
+    level: text('level', { enum: ['N5', 'N4', 'N3', 'N2', 'N1'] }).notNull(),
+    strokeCount: integer('stroke_count').notNull(),
+    svg: text('svg').notNull(),
+    words: jsonb('words').$type<KanjiWord[]>().notNull().default([]),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    chIdx: uniqueIndex('kanji_ch_idx').on(table.ch),
+    levelIdx: index('kanji_level_idx').on(table.level, table.strokeCount),
+  })
+)
+
+/** One row per character per day; `reps` counts the tracings. */
+export const kanjiReps = pgTable(
+  'kanji_reps',
+  {
+    id: text('id').primaryKey(),
+    kanjiCh: text('kanji_ch').notNull(),
+    reps: integer('reps').notNull().default(1),
+    practicedOn: date('practiced_on').notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => ({
+    byCh: index('kanji_reps_ch_idx').on(table.kanjiCh, table.practicedOn),
+    oncePerDay: uniqueIndex('kanji_reps_ch_day_key').on(table.kanjiCh, table.practicedOn),
+  })
+)
+
 // ---------- Types -------------------------------------------------------------
 
 export type User = typeof user.$inferSelect
@@ -384,6 +427,7 @@ export type ChatSession = typeof chatSessions.$inferSelect
 export type JpDay = typeof jpDays.$inferSelect
 export type ResearchItem = typeof researchItems.$inferSelect
 export type WorkItem = typeof workItems.$inferSelect
+export type Kanji = typeof kanji.$inferSelect
 export type Meeting = typeof meetings.$inferSelect
 export type MeetingEntry = typeof meetingEntries.$inferSelect
 export type MeetingAgendaItem = typeof meetingAgendaItems.$inferSelect
