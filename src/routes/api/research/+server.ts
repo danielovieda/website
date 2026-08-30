@@ -27,7 +27,12 @@ const Body = z.object({
     )
     .max(10)
     .default([]),
-  estHours: z.number().positive().max(1000).nullable().default(null),
+  // 50,000 rather than a tight bound: this cap exists to catch nonsense, not
+  // to encode an opinion about how long a job takes. It was 1,000 - fine for
+  // pouring a slab, and it rejected a Japanese-study roadmap that legitimately
+  // came back at 1,700 hours, losing a completed ten-minute research run to a
+  // 400. A ceiling should only ever reject the absurd.
+  estHours: z.number().positive().max(50000).nullable().default(null),
   verdict: z.string().trim().max(4000).nullable().default(null),
   project: z.string().trim().max(200).nullable().default(null),
 })
