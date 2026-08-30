@@ -217,6 +217,10 @@ export const jpDays = pgTable(
     word: text('word').notNull(),
     reading: text('reading').notNull(),
     romaji: text('romaji').notNull(),
+    // The kanji form, when there is one. `word` carries whatever is being
+    // TAUGHT, which in the kana phase is the reading - so this is the only
+    // place 女性 exists when the lesson is teaching じょせい.
+    written: text('written'),
     gloss: text('gloss').notNull(),
     // [{ dayN, word, gloss }] — the review prompts quizzed in that email, so
     // the survey can ask which ones were missed.

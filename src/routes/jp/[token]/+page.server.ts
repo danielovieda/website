@@ -22,13 +22,18 @@ export const load: PageServerLoad = async ({ params }) => {
     kanjiBase = null
   }
   // Kanji in today's word, so each is one tap from the stroke-order pad.
-  const kanjiInWord = [...day.word].filter((c) => /[\u4e00-\u9faf]/.test(c))
+  // Prefer the written form: in the kana phase `word` is the reading and
+  // holds no kanji at all.
+  const kanjiInWord = [...(day.written || day.word)].filter((c) =>
+    /[\u4e00-\u9faf]/.test(c)
+  )
 
   return {
     kanjiBase,
     kanjiInWord,
     dayN: day.dayN,
     word: day.word,
+    written: day.written,
     reading: day.reading,
     romaji: day.romaji,
     gloss: day.gloss,

@@ -9,6 +9,8 @@ const Body = z.object({
   word: z.string().trim().min(1).max(100),
   reading: z.string().trim().min(1).max(100),
   romaji: z.string().trim().min(1).max(100),
+  // Optional: not every word has a kanji form, and older senders omit it.
+  written: z.string().trim().max(100).nullish(),
   gloss: z.string().trim().min(1).max(300),
   reviewWords: z
     .array(

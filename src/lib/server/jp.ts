@@ -19,6 +19,7 @@ export type RecordDayInput = {
   word: string
   reading: string
   romaji: string
+  written?: string | null
   gloss: string
   reviewWords: JpReviewWord[]
 }
@@ -36,6 +37,7 @@ export async function recordDay(input: RecordDayInput): Promise<JpDay> {
       word: input.word,
       reading: input.reading,
       romaji: input.romaji,
+      written: input.written ?? null,
       gloss: input.gloss,
       reviewWords: input.reviewWords,
     })
@@ -45,6 +47,7 @@ export async function recordDay(input: RecordDayInput): Promise<JpDay> {
         word: input.word,
         reading: input.reading,
         romaji: input.romaji,
+        written: input.written ?? null,
         gloss: input.gloss,
         reviewWords: input.reviewWords,
         sentAt: new Date(),

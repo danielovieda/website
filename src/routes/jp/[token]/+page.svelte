@@ -41,6 +41,9 @@
     <header class="mb-8">
       <p class="text-xs uppercase tracking-widest text-ink-400">Day {data.dayN}</p>
       <h1 class="mt-1 text-3xl font-semibold">{data.word}</h1>
+      {#if data.written && data.written !== data.word}
+        <p class="text-lg text-ink-300">{data.written}</p>
+      {/if}
       <p class="mt-1 text-ink-300">{data.romaji} — {data.gloss}</p>
 
       {#if data.kanjiBase}
