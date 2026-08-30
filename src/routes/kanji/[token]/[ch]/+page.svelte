@@ -78,6 +78,18 @@
     <span class="text-ink-500">{data.level} · {data.strokeCount} strokes · {data.reps} traced</span>
   </div>
 
+  <section class="mt-3 text-center">
+    <p class="text-5xl">{data.ch}</p>
+    {#if data.meanings.length}
+      <p class="mt-1 text-sm text-ink-200">{data.meanings.join(', ')}</p>
+    {/if}
+    <p class="mt-1 text-xs text-ink-400">
+      {#if data.onReadings.length}<span>on: {data.onReadings.join('・')}</span>{/if}
+      {#if data.kunReadings.length}<span class="ml-3">kun: {data.kunReadings.join('・')}</span>{/if}
+    </p>
+    <p class="mt-1 text-xs text-ink-500">appears in {data.wordCount} of your words</p>
+  </section>
+
   <!-- SAMPLE WORDS FIRST: he asked for sentences above the pad, and a kanji is
        easier to hold onto attached to words he is already being taught. -->
   {#if data.words.length}

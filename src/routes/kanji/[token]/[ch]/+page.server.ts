@@ -19,7 +19,9 @@ export const load: PageServerLoad = async ({ params }) => {
   const { prev, next } = await neighbours(ch)
   return {
     ch: k.ch, level: k.level, strokeCount: k.strokeCount, svg: k.svg,
-    words: k.words, reps: await totalReps(ch), prev, next,
+    words: k.words, meanings: k.meanings, onReadings: k.onReadings,
+    kunReadings: k.kunReadings, wordCount: k.wordCount,
+    reps: await totalReps(ch), prev, next,
   }
 }
 

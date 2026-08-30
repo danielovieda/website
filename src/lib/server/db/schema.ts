@@ -392,6 +392,12 @@ export const kanji = pgTable(
     strokeCount: integer('stroke_count').notNull(),
     svg: text('svg').notNull(),
     words: jsonb('words').$type<KanjiWord[]>().notNull().default([]),
+    meanings: jsonb('meanings').$type<string[]>().notNull().default([]),
+    onReadings: jsonb('on_readings').$type<string[]>().notNull().default([]),
+    kunReadings: jsonb('kun_readings').$type<string[]>().notNull().default([]),
+    // How many of his own words use this kanji. THE study order: 日 unlocks 26,
+    // most unlock one. Stroke count says nothing about usefulness.
+    wordCount: integer('word_count').notNull().default(0),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (table) => ({

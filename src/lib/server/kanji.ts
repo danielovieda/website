@@ -14,23 +14,28 @@ export type KanjiSummary = {
   ch: string
   level: string
   strokeCount: number
+  wordCount: number
+  meaning: string | null
   reps: number
 }
 
 /** The grid: every character, with how many times it has been traced. */
-export async function listKanji(level?: 'N5' | 'N4'): Promise<KanjiSummary[]> {
+export async function listKanji(level?: 'N5' | 'N4' | 'N2' | 'N1'): Promise<KanjiSummary[]> {
   const rows = await db
     .select({
       ch: kanji.ch,
       level: kanji.level,
       strokeCount: kanji.strokeCount,
+      wordCount: kanji.wordCount,
+      meaning: raw<string | null>`${kanji.meanings}->>0`,
       reps: raw<number>`COALESCE((SELECT SUM(r.reps)::int FROM kanji_reps r WHERE r.kanji_ch = ${kanji.ch}), 0)`,
     })
     .from(kanji)
     .where(level ? eq(kanji.level, level) : undefined)
-    // Fewest strokes first: it is the only ordering that makes a 687-character
-    // grid approachable, and it happens to track difficulty closely.
-    .orderBy(asc(kanji.level), asc(kanji.strokeCount), asc(kanji.ch))
+    // MOST USEFUL FIRST, not fewest strokes. A character that appears in 26 of
+    // his words earns study time; one that appears in a single word does not,
+    // however few strokes it has. Level first so N5 is finished before N4.
+    .orderBy(asc(kanji.level), desc(kanji.wordCount), asc(kanji.ch))
   return rows
 }
 
@@ -44,7 +49,7 @@ export async function neighbours(ch: string): Promise<{ prev: string | null; nex
   const all = await db
     .select({ ch: kanji.ch })
     .from(kanji)
-    .orderBy(asc(kanji.level), asc(kanji.strokeCount), asc(kanji.ch))
+    .orderBy(asc(kanji.level), desc(kanji.wordCount), asc(kanji.ch))
   const i = all.findIndex((k) => k.ch === ch)
   if (i === -1) return { prev: null, next: null }
   return {

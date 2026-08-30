@@ -18,12 +18,16 @@
   <header class="border-b border-ink-700 pb-3">
     <h1 class="text-xl font-medium">Kanji</h1>
     <p class="mt-1 text-xs text-ink-400">
-      {data.kanji.length} characters · {practised} started · from your own N5/N4 word list
+      {data.kanji.length} characters · {practised} started · most useful first
+    </p>
+    <p class="mt-1 text-xs text-ink-500">
+      Levels are the real JLPT kanji lists (KANJIDIC2): N5 is 103 characters, N4 adds 181.
+      The number under each is how many of your own words use it.
     </p>
   </header>
 
   <div class="mt-3 flex gap-2 text-sm">
-    {#each [['', 'all'], ['N5', 'N5'], ['N4', 'N4']] as [v, label] (label)}
+    {#each [['N5', 'N5'], ['N4', 'N4'], ['N2', 'N2'], ['N1', 'N1'], ['', 'all']] as [v, label] (label)}
       <a
         href={v ? `?level=${v}` : '?'}
         class="rounded border px-3 py-1 {(data.level ?? '') === v
@@ -41,17 +45,18 @@
     </p>
   {/if}
 
-  <!-- Ordered fewest strokes first: the only thing that makes 687 characters
-       approachable, and it tracks difficulty closely. -->
+  <!-- Ordered MOST USEFUL first: how many of his own words each character
+       unlocks. 日 appears in 26; most appear in one. -->
   <div class="mt-4 grid grid-cols-6 gap-1.5 sm:grid-cols-8">
     {#each data.kanji as k (k.ch)}
       <a
         href="/kanji/{token}/{encodeURIComponent(k.ch)}"
-        title="{k.level} · {k.strokeCount} strokes · {k.reps} traced"
+        title="{k.level} · {k.meaning ?? ''} · {k.strokeCount} strokes · in {k.wordCount} of your words · {k.reps} traced"
         class="relative flex aspect-square items-center justify-center rounded border text-2xl
                {k.reps > 0 ? 'border-accent/60 bg-ink-800' : 'border-ink-700 bg-ink-800/40'}"
       >
         {k.ch}
+        <span class="absolute bottom-0 left-0.5 text-[9px] text-ink-500">{k.wordCount}</span>
         {#if k.reps > 0}
           <span class="absolute bottom-0 right-0.5 text-[9px] text-accent">{k.reps}</span>
         {/if}
