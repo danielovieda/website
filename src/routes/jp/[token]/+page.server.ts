@@ -2,6 +2,7 @@ import { error, fail } from '@sveltejs/kit'
 import { z } from 'zod'
 import { getDay, recordFeedback } from '$lib/server/jp'
 import { verifyDayToken } from '$lib/server/jp-token'
+import { signKanjiToken } from '$lib/server/kanji-token'
 import type { Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async ({ params }) => {
@@ -11,7 +12,21 @@ export const load: PageServerLoad = async ({ params }) => {
   const day = await getDay(dayN)
   if (!day) throw error(404, 'Not found')
 
+  // Minting here rather than linking with this page's own token: the survey
+  // link lives in every lesson email, so it must never carry work-list access.
+  // If the secret is unset the page still renders, just without the links.
+  let kanjiBase: string | null = null
+  try {
+    kanjiBase = `/kanji/${signKanjiToken()}`
+  } catch {
+    kanjiBase = null
+  }
+  // Kanji in today's word, so each is one tap from the stroke-order pad.
+  const kanjiInWord = [...day.word].filter((c) => /[\u4e00-\u9faf]/.test(c))
+
   return {
+    kanjiBase,
+    kanjiInWord,
     dayN: day.dayN,
     word: day.word,
     reading: day.reading,

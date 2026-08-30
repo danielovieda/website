@@ -4,4 +4,4 @@
  * is the one just pushed, not a cached or failed deploy still serving the old
  * bundle. A 404 means the new code is not live yet.
  */
-export const BUILD_ID = 'kanjilv0007'
+export const BUILD_ID = 'jpkanjilink1'

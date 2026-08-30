@@ -1,5 +1,6 @@
 import { error, fail } from '@sveltejs/kit'
 import { verifyWorkToken } from '$lib/server/work-token'
+import { verifyKanjiToken } from '$lib/server/kanji-token'
 import { getKanji, neighbours, recordReps, totalReps } from '$lib/server/kanji'
 import type { Actions, PageServerLoad } from './$types'
 
@@ -12,7 +13,7 @@ function localToday() {
 }
 
 export const load: PageServerLoad = async ({ params }) => {
-  if (!verifyWorkToken(params.token)) throw error(404, 'Not found')
+  if (!verifyKanjiToken(params.token) && !verifyWorkToken(params.token)) throw error(404, 'Not found')
   const ch = decodeURIComponent(params.ch)
   const k = await getKanji(ch)
   if (!k) throw error(404, 'Not found')
@@ -28,7 +29,7 @@ export const load: PageServerLoad = async ({ params }) => {
 export const actions: Actions = {
   // Re-verified: a successful load does not authorise a later POST.
   rep: async ({ params, request }) => {
-    if (!verifyWorkToken(params.token)) throw error(404, 'Not found')
+    if (!verifyKanjiToken(params.token) && !verifyWorkToken(params.token)) throw error(404, 'Not found')
     const n = Number((await request.formData()).get('count') || 1)
     if (!Number.isSafeInteger(n) || n < 1 || n > 200) return fail(400, { error: 'Bad count.' })
     const total = await recordReps(decodeURIComponent(params.ch), n, localToday())

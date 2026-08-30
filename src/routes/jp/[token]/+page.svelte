@@ -42,6 +42,24 @@
       <p class="text-xs uppercase tracking-widest text-ink-400">Day {data.dayN}</p>
       <h1 class="mt-1 text-3xl font-semibold">{data.word}</h1>
       <p class="mt-1 text-ink-300">{data.romaji} — {data.gloss}</p>
+
+      {#if data.kanjiBase}
+        <div class="mt-3 flex flex-wrap items-center gap-2 text-sm">
+          {#if data.kanjiInWord.length}
+            <span class="text-xs text-ink-400">practise writing:</span>
+            {#each data.kanjiInWord as ch (ch)}
+              <a
+                href="{data.kanjiBase}/{encodeURIComponent(ch)}"
+                class="rounded border border-ink-600 px-2.5 py-1 text-lg leading-none hover:border-accent"
+                >{ch}</a
+              >
+            {/each}
+          {/if}
+          <a href={data.kanjiBase} class="text-xs text-accent underline underline-offset-4"
+            >all kanji →</a
+          >
+        </div>
+      {/if}
     </header>
 
     <form method="POST" use:enhance={() => {
