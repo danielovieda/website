@@ -51,6 +51,7 @@ export const GET: RequestHandler = async ({ request }) => {
       dueDate: i.dueDate,
       dueTime: i.dueTime ? i.dueTime.slice(0, 5) : null,
       recur: i.recur,
+      lastDone: i.completedAt ? i.completedAt.toISOString().slice(0, 10) : null,
     })
     return json({
       ok: true,

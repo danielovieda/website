@@ -6,7 +6,7 @@
  * id — there is exactly one owner, reached through a signed link.
  */
 
-import { and, asc, eq, isNotNull, ne, or, sql } from 'drizzle-orm'
+import { and, asc, eq, isNotNull, lt, ne, or, sql } from 'drizzle-orm'
 import { db } from './db'
 import { workItems, type WorkItem } from './db/schema'
 
@@ -47,7 +47,48 @@ export type NewWorkItem = {
   meetingEntryId?: string | null
 }
 
+/**
+ * Roll any recurring item whose deadline has already passed on to its next
+ * occurrence.
+ *
+ * A recurring task is never "closed", so without this its due_date sits in the
+ * past forever and it reports as overdue every single day until it happens to
+ * be ticked. That is not information - a standing weekly obligation with a
+ * date three weeks gone tells you nothing except that the clock moved, and it
+ * drowns the genuinely overdue one-offs next to it.
+ *
+ * What is NOT lost: completed_at still records when it was last actually done,
+ * which is the real signal. "Not filed since 8/13" is useful; "overdue by 19
+ * days" on something due every Thursday is noise.
+ *
+ * Called on every read, so the list is self-correcting whether or not anyone
+ * has opened the page.
+ */
+async function rollRecurring(): Promise<void> {
+  const { date: today } = localNow()
+  const stale = await db
+    .select()
+    .from(workItems)
+    .where(
+      and(
+        eq(workItems.status, 'open'),
+        eq(workItems.recur, 'weekly'),
+        isNotNull(workItems.recurWeekday),
+        lt(workItems.dueDate, today)
+      )
+    )
+  for (const item of stale) {
+    if (item.recurWeekday === null) continue
+    const { date, weekday } = localNow()
+    await db
+      .update(workItems)
+      .set({ dueDate: nextWeekday(date, weekday, item.recurWeekday), updatedAt: new Date() })
+      .where(eq(workItems.id, item.id))
+  }
+}
+
 export async function listWork(includeDone = false): Promise<WorkItem[]> {
+  await rollRecurring()
   const rows = await db
     .select()
     .from(workItems)
@@ -160,7 +201,7 @@ export async function workForReminder(): Promise<{
   overdue: WorkItem[]
   dueToday: WorkItem[]
 }> {
-  const open = await listWork(false)
+  const open = await listWork(false)   // rolls stale recurring items first
   const { date: today, clock } = localNow()
 
   const isOverdue = (i: (typeof open)[number]) => {
